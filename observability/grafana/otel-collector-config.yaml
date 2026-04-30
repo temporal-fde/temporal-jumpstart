@@ -12,11 +12,29 @@ receivers:
           scrape_interval: 15s
           metrics_path: '/actuator/prometheus'
           static_configs:
-            - targets: ['host.docker.internal:8081']
+            - targets: [ 'host.docker.internal:9091' ]
               labels:
-                service: 'temporal-worker'
+                service: 'apps-api'
                 environment: 'local'
-                worker_instance: 'worker-1'
+            - targets: ['host.docker.internal:9092']
+              labels:
+                service: 'apps-worker'
+                environment: 'local'
+                worker_instance: 'apps-worker-1'
+            - targets: [ 'host.docker.internal:9081' ]
+              labels:
+                service: 'processing-api'
+                environment: 'local'
+            - targets: [ 'host.docker.internal:9082' ]
+              labels:
+                service: 'processing-worker'
+                environment: 'local'
+                worker_instance: 'processing-worker-1'
+            - targets: [ 'host.docker.internal:9072' ]
+              labels:
+                service: 'enablements-worker'
+                environment: 'local'
+                worker_instance: 'enablements-worker-1'
 
         # Non-Spring apps with standard /metrics endpoint
         - job_name: 'temporal-worker-standard'

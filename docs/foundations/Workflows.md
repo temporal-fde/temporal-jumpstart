@@ -160,7 +160,8 @@ to expose these as **Queries** or **Search Attributes**.
 A Temporal Failure thrown due to a _business_ condition will
 - Show the Execution _itself_ as having failed (eg, could not do as instructed)
 - Increment the `workflow_failed` metric which can skew the perceived health of the Application
-
+    - Explicitly set `benign: true` on the failure if you want to avoid this counter.
+  
 **Benefits**:
 - Keeps execution concerns separate from business concerns
 - Avoids the false perception of poor system health

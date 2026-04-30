@@ -37,6 +37,8 @@ services:
       - "4318:4318"   # OTLP HTTP receiver
       - "8888:8888"   # Prometheus metrics for the collector itself
       - "13133:13133" # Health check endpoint
+    environment:
+      - TEMPORAL_CLOUD_API_KEY=${TEMPORAL_CLOUD_API_KEY}
     restart: unless-stopped
     extra_hosts:
       - "host.docker.internal:host-gateway"
