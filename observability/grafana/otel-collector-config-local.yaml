@@ -7,6 +7,17 @@ receivers:
   prometheus:
     config:
       scrape_configs:
+        - job_name: 'temporal-cloud'
+          scrape_interval: 60s
+          scrape_timeout: 30s
+          honor_timestamps: true
+          scheme: https
+          authorization:
+            type: Bearer
+            credentials: '${TEMPORAL_CLOUD_API_KEY}'
+          static_configs:
+            - targets: ['metrics.temporal.io']
+          metrics_path: '/v1/metrics'
         # Spring Boot apps with Actuator
         - job_name: 'temporal-worker-spring'
           scrape_interval: 15s
@@ -17,7 +28,29 @@ receivers:
                 service: 'temporal-worker'
                 environment: 'local'
                 worker_instance: 'worker-1'
-
+            - targets: [ 'host.docker.internal:9091' ]
+              labels:
+                service: 'apps-api'
+                environment: 'local'
+            - targets: ['host.docker.internal:9092']
+              labels:
+                service: 'apps-worker'
+                environment: 'local'
+                worker_instance: 'apps-worker-1'
+            - targets: [ 'host.docker.internal:9081' ]
+              labels:
+                service: 'processing-api'
+                environment: 'local'
+            - targets: [ 'host.docker.internal:9082' ]
+              labels:
+                service: 'processing-worker'
+                environment: 'local'
+                worker_instance: 'processing-worker-1'
+            - targets: [ 'host.docker.internal:9072' ]
+              labels:
+                service: 'enablements-worker'
+                environment: 'local'
+                worker_instance: 'enablements-worker-1'
         # Non-Spring apps with standard /metrics endpoint
         - job_name: 'temporal-worker-standard'
           scrape_interval: 15s
